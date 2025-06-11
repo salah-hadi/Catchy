@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Bug Catcher",
+  "version": "1.0.0",
+  "description": "Capture screenshots and document bugs with detailed information for easier bug reporting.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "downloads"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Bug Catcher",
+    "default_popup_height": 600,
+    "default_popup_width": 400,
+    "resizable": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
