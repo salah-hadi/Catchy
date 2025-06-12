@@ -184,6 +184,49 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const steps = generateStepsToReproduce(pageInfo);
     interactionLog = [];
     
+    // Create a resizable popup window
+    const popupWindow = window.open('', 'Bug Details', 'width=800,height=600,resizable=yes,scrollbars=yes');
+    
+    // Create HTML content for the popup
+    const popupContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Bug Details</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .container { max-width: 760px; margin: 0 auto; }
+          .header { color: #333; margin-bottom: 20px; }
+          .details { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+          pre { background: #f0f0f0; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1 class="header">Bug Details</h1>
+          <div class="details">
+            <h2>Page Information</h2>
+            <p><strong>URL:</strong> ${pageInfo.url}</p>
+            <p><strong>Title:</strong> ${pageInfo.title}</p>
+            <p><strong>Timestamp:</strong> ${new Date(pageInfo.timestamp).toLocaleString()}</p>
+            <p><strong>User Agent:</strong> ${pageInfo.userAgent}</p>
+            <p><strong>Viewport:</strong> ${pageInfo.viewport.width}x${pageInfo.viewport.height}</p>
+            <p><strong>Scroll Position:</strong> ${pageInfo.scrollPosition.x},${pageInfo.scrollPosition.y}</p>
+          </div>
+          <div class="details">
+            <h2>Steps to Reproduce</h2>
+            <pre>${steps}</pre>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+    
+    // Write content to popup
+    popupWindow.document.write(popupContent);
+    popupWindow.document.close();
+    
+    // Send response
     sendResponse({
       ...pageInfo,
       generatedSteps: steps
